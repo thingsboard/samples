@@ -38,6 +38,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.thingsboard.server.common.data.Customer;
 import org.thingsboard.server.common.data.Dashboard;
+import org.thingsboard.server.common.data.DataConstants;
 import org.thingsboard.server.common.data.Device;
 import org.thingsboard.server.common.data.id.CustomerId;
 import org.thingsboard.server.common.data.id.DeviceId;
@@ -71,6 +72,8 @@ public class DemoData {
     private List<Customer> customers = new ArrayList<>();
     private List<Device> devices = new ArrayList<>();
     private Map<String, String> customerDevices = new HashMap<>();
+    private Map<String, Map<String,JsonNode>> devicesAttributes = new HashMap<>();
+
     private List<Dashboard> dashboards = new ArrayList<>();
 
     private List<Device> loadedDevices = new ArrayList<>();
@@ -291,6 +294,24 @@ public class DemoData {
                         customerDevices.put(deviceName, customerTitle);
                     }
             );
+
+            JsonNode deviceAttributesJson = devicesJson.get("deviceAttributes");
+            deviceAttributesJson.forEach(
+                    jsonNode -> {
+                        String deviceName = jsonNode.get("deviceName").asText();
+                        Map<String,JsonNode> attributesMap = new HashMap<>();
+                        if (jsonNode.has("server")) {
+                            JsonNode serverAttributes = jsonNode.get("server");
+                            attributesMap.put(DataConstants.SERVER_SCOPE, serverAttributes);
+                        }
+                        if (jsonNode.has("shared")) {
+                            JsonNode sharedAttributes = jsonNode.get("shared");
+                            attributesMap.put(DataConstants.SHARED_SCOPE, sharedAttributes);
+                        }
+                        devicesAttributes.put(deviceName, attributesMap);
+                    }
+            );
+
         }
         dashboardsContent.forEach(
                 dashboardContent -> {
@@ -418,11 +439,23 @@ public class DemoData {
                             restTemplate.postForLocation(baseUrl + "/api/customer/{customerId}/device/{deviceId}", null, customerId.getId().toString(),
                                     savedDevice.getId().toString());
                         }
-                        deviceIdMap.put(savedDevice.getName(), savedDevice.getId());
+                        String deviceName = savedDevice.getName();
+                        DeviceId deviceId = savedDevice.getId();
+                        deviceIdMap.put(deviceName, deviceId);
                         loadedDevices.add(savedDevice);
                         DeviceCredentials credentials =
-                                restTemplate.getForObject(baseUrl + "/api/device/{deviceId}/credentials", DeviceCredentials.class, savedDevice.getId().getId());
-                        loadedDevicesCredentialsMap.put(savedDevice.getId(), credentials);
+                                restTemplate.getForObject(baseUrl + "/api/device/{deviceId}/credentials", DeviceCredentials.class, deviceId.getId().toString());
+                        loadedDevicesCredentialsMap.put(deviceId, credentials);
+
+                        Map<String, JsonNode> attributesMap = devicesAttributes.get(deviceName);
+                        if (attributesMap != null) {
+                            attributesMap.forEach(
+                                    (k, v) -> {
+                                        restTemplate.postForObject(baseUrl + "/api/plugins/telemetry/{deviceId}/{attributeScope}", v, Void.class,
+                                                deviceId.getId().toString(), k);
+                                    }
+                            );
+                        }
                     } catch (Exception e) {
                         log.error("Unable to upload device!");
                         log.error("Cause:", e);
