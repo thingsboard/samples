@@ -1,0 +1,34 @@
+{
+  "devices":[
+    {
+      "name":"Building A Server Room",
+      "additionalInfo":{
+        "description":"Server Room located in the Building A"
+      }
+    },
+    {
+      "name":"Building B Server Room",
+      "additionalInfo":{
+        "description":"Server Room located in the Building A"
+      }
+    },
+    {
+      "name":"Building C Server Room",
+      "additionalInfo":{
+        "description":"Server Room located in the Building A"
+      }
+    }
+
+  ],
+  "customerDevices": [
+  ],
+  "deviceAttributes": [
+    {
+      "deviceName": "Building A Server Room",
+      "server": {
+        "ZoneId": "Server Room 123",
+        "ZoneType": "Server Room"
+      }
+    }
+  ]
+}

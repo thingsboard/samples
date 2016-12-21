@@ -15,7 +15,8 @@
     limitations under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -23,11 +24,12 @@
         <version>1.0.0</version>
         <artifactId>samples</artifactId>
     </parent>
+
     <groupId>org.thingsboard.samples</groupId>
-    <artifactId>thingsboard-demo-loader</artifactId>
+    <artifactId>facilities-monitoring</artifactId>
     <packaging>jar</packaging>
 
-    <name>Thingsboard Demo Loader</name>
+    <name>Thingsboard Facilities Monitoring Demo</name>
     <url>http://thingsboard.io</url>
 
     <properties>
@@ -37,13 +39,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.thingsboard.common</groupId>
-            <artifactId>data</artifactId>
+            <groupId>org.thingsboard.samples</groupId>
+            <artifactId>thingsboard-demo-loader</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.thingsboard.samples</groupId>
-            <artifactId>thingsboard-demo-data</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.eclipse.paho</groupId>
+            <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -90,10 +91,10 @@
                 </configuration>
             </plugin>
             <plugin>
-              <artifactId>maven-assembly-plugin</artifactId>
+                <artifactId>maven-assembly-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>demo-loader-jar</id>
+                        <id>facilities-monitoring-jar</id>
                         <phase>package</phase>
                         <goals>
                             <goal>single</goal>
@@ -115,4 +116,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

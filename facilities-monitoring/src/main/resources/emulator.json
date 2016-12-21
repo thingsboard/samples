@@ -1,0 +1,25 @@
+{
+  "devices": [
+    {
+      "name": "Building A Server Room",
+      "attributes": {
+        "latitude": 37.7750924,
+        "longitude": -122.4185093
+      },
+      "timeseries": [
+        {
+          "key": "temperature",
+          "anomalyValue": 100.0,
+          "minValue": 20.0,
+          "maxValue": 25.0
+        },
+        {
+          "key": "humidity",
+          "anomalyValue": 80.0,
+          "minValue": 55.0,
+          "maxValue": 65.0
+        }
+      ]
+    }
+  ]
+}
