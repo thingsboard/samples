@@ -1,0 +1,13 @@
+{
+  "customers":[
+    {
+      "title":"Customer A"
+    },
+    {
+      "title":"Customer B"
+    },
+    {
+      "title":"Customer C"
+    }
+  ]
+}

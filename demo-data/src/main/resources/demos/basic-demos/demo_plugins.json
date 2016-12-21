@@ -1,0 +1,53 @@
+{
+  "plugins":[
+    {
+      "apiToken":"messaging",
+      "name":"Demo Device Messaging RPC Plugin",
+      "clazz":"org.thingsboard.server.extensions.core.plugin.messaging.DeviceMessagingPlugin",
+      "publicAccess":false,
+      "state":"ACTIVE",
+      "configuration":{
+        "maxDeviceCountPerCustomer":1024,
+        "defaultTimeout":20000,
+        "maxTimeout":60000
+      }
+    },
+    {
+      "apiToken":"mail",
+      "name":"Demo Email Plugin",
+      "clazz":"org.thingsboard.server.extensions.core.plugin.mail.MailPlugin",
+      "publicAccess":true,
+      "state":"ACTIVE",
+      "configuration":{
+        "host":"smtp.sendgrid.net",
+        "port":2525,
+        "username":"apikey",
+        "password":"your_api_key",
+        "otherProperties":[
+          {
+            "key":"mail.smtp.auth",
+            "value":"true"
+          },
+          {
+            "key":"mail.smtp.timeout",
+            "value":"10000"
+          },
+          {
+            "key":"mail.smtp.starttls.enable",
+            "value":"true"
+          }
+        ]
+      }
+    },
+    {
+      "apiToken":"time",
+      "name":"Demo Time RPC Plugin",
+      "clazz":"org.thingsboard.server.extensions.core.plugin.time.TimePlugin",
+      "publicAccess":false,
+      "state":"ACTIVE",
+      "configuration":{
+        "timeFormat":"yyyy MM dd HH:mm:ss.SSS"
+      }
+    }
+  ]
+}
