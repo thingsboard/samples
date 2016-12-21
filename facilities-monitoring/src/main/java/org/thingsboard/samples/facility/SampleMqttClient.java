@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.thingsboard.samples.facility;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -36,13 +35,16 @@ public class SampleMqttClient {
     @Getter
     private final String deviceToken;
     @Getter
+    private final String deviceName;
+    @Getter
     private final String clientId;
     private final MqttClientPersistence persistence;
     private final MqttAsyncClient client;
 
-    public SampleMqttClient(String uri, String deviceToken) throws Exception {
+    public SampleMqttClient(String uri, String deviceName, String deviceToken) throws Exception {
         this.clientId = MqttAsyncClient.generateClientId();
         this.deviceToken = deviceToken;
+        this.deviceName = deviceName;
         this.persistence = new MemoryPersistence();
         this.client = new MqttAsyncClient(uri, clientId, persistence);
     }
@@ -54,12 +56,12 @@ public class SampleMqttClient {
             client.connect(options, null, new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken iMqttToken) {
-                    log.info("OnSuccess");
+                    log.info("[{}] connected to Thingsboard!", deviceName);
                 }
 
                 @Override
                 public void onFailure(IMqttToken iMqttToken, Throwable e) {
-                    log.info("OnFailure", e);
+                    log.error("[{}] failed to connect to Thingsboard!", deviceName, e);
                 }
             }).waitForCompletion();
         } catch (MqttException e) {
@@ -81,18 +83,16 @@ public class SampleMqttClient {
     }
 
     private void publish(String topic, JsonNode data, boolean sync) throws Exception {
-        long sendTime = System.currentTimeMillis();
         MqttMessage msg = new MqttMessage(MAPPER.writeValueAsString(data).getBytes(StandardCharsets.UTF_8));
-        log.info(MAPPER.writeValueAsString(data));
         IMqttDeliveryToken deliveryToken = client.publish(topic, msg, null, new IMqttActionListener() {
             @Override
             public void onSuccess(IMqttToken asyncActionToken) {
-                log.info("Data updated!");
+                log.trace("Data updated!");
             }
 
             @Override
             public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                log.info("Data update failed!");
+                log.error("[{}] Data update failed!", deviceName, exception);
             }
         });
         if (sync) {

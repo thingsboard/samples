@@ -72,7 +72,7 @@ public class FacilitiesDemoMain {
             for (EmulatorDescriptor descriptor : descriptors) {
                 Device device = demoDevices.get(descriptor.getName());
                 DeviceCredentials token = data.getDeviceCredentialsByDeviceId(device.getId());
-                MqttClientEmulator emulator = new MqttClientEmulator(executor, TimeUnit.SECONDS.toMillis(1), mqttUrl, token.getCredentialsId());
+                MqttClientEmulator emulator = new MqttClientEmulator(executor, TimeUnit.SECONDS.toMillis(1), mqttUrl, descriptor.getName(), token.getCredentialsId());
                 emulator.setAttributes(descriptor.getAttributes());
                 emulator.setTelemetry(descriptor.getTimeseries());
                 emulator.connect();
@@ -85,9 +85,24 @@ public class FacilitiesDemoMain {
 
             boolean quit = false;
             while (!quit) {
-                String chars = ConsoleReader.readLine("Press Q to quite..");
-                if (chars.equalsIgnoreCase("Q")) {
+                String chars = ConsoleReader.readLine("Press Q to quite or M to simulate malfunction");
+                if ("Q".equalsIgnoreCase(chars)) {
                     quit = true;
+                } else if ("M".equalsIgnoreCase(chars)) {
+                    for (int i = 0; i < descriptors.size(); i++) {
+                        System.out.println("[" + i + "]: " + descriptors.get(i).getName());
+                    }
+                    String deviceNumberStr = ConsoleReader.readLine("Please input device number (from 0 to " + (descriptors.size() - 1) + "): ");
+                    try {
+                        Integer deviceNumber = Integer.valueOf(deviceNumberStr);
+                        if (deviceNumber < 0 || deviceNumber >= descriptors.size()) {
+                            throw new NumberFormatException();
+                        }
+                        MqttClientEmulator emulator = emulators.get(deviceNumber);
+                        emulator.simulateMalfunction();
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid device number: " + deviceNumberStr + " !");
+                    }
                 }
             }
 

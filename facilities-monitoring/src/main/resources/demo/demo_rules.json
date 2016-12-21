@@ -1,4 +1,163 @@
 {
   "rules": [
+    {
+      "name":"Meeting Room Monitoring Rule",
+      "state":"ACTIVE",
+      "weight":0,
+      "pluginToken":"sendgrid",
+      "filters":[
+        {
+          "configuration":{
+            "messageTypes":[
+              "POST_TELEMETRY"
+            ]
+          },
+          "name":"Telemetry Filter",
+          "clazz":"org.thingsboard.server.extensions.core.filter.MsgTypeFilter"
+        },
+        {
+          "configuration":{
+            "filter":"typeof ss.ZoneType !== 'undefined' \n&& ss.ZoneType === 'Meeting Room'"
+          },
+          "name":"Meeting Room Filter",
+          "clazz":"org.thingsboard.server.extensions.core.filter.DeviceAttributesFilter"
+        },
+        {
+          "configuration":{
+            "filter":"(\n    typeof temperature !== 'undefined' \n    && (temperature <= 21 || temperature >= 24)\n)\n|| \n(\n    typeof humidity !== 'undefined' \n    && (humidity <= 35 || humidity >= 65)\n)"
+          },
+          "name":"Humidity & Temperature Filter",
+          "clazz":"org.thingsboard.server.extensions.core.filter.DeviceTelemetryFilter"
+        }
+      ],
+      "processor":{
+        "configuration":{
+          "alarmIdTemplate":"[$date.get('yyyy-MM-dd HH:mm')] $ss.get('ZoneId') HVAC malfunction detected!",
+          "alarmBodyTemplate":"[$date.get('yyyy-MM-dd HH:mm:ss')] $ss.get('ZoneId') HVAC malfunction detected. \nTemperature - $temperature.valueAsString (°C). \nHumidity - $humidity.valueAsString (%)!"
+        },
+        "clazz":"org.thingsboard.server.extensions.core.processor.AlarmDeduplicationProcessor",
+        "name":"Alarm Processor"
+      },
+      "action":{
+        "configuration":{
+          "sendFlag":"isNewAlarm",
+          "fromTemplate":"$EMAIL",
+          "toTemplate":"$EMAIL",
+          "subjectTemplate":"$alarmId",
+          "bodyTemplate":"$alarmBody"
+        },
+        "clazz":"org.thingsboard.server.extensions.core.action.mail.SendMailAction",
+        "name":"Send Mail Action"
+      },
+      "additionalInfo":{
+        "description":"Monitors humidity and temperature in the server rooms"
+      }
+    },
+    {
+      "name":"Server Room Monitoring Rule",
+      "state":"ACTIVE",
+      "weight":0,
+      "pluginToken":"sendgrid",
+      "filters":[
+        {
+          "configuration":{
+            "messageTypes":[
+              "POST_TELEMETRY"
+            ]
+          },
+          "name":"Telemetry Filter",
+          "clazz":"org.thingsboard.server.extensions.core.filter.MsgTypeFilter"
+        },
+        {
+          "configuration":{
+            "filter":"typeof ss.ZoneType !== 'undefined' \n&& ss.ZoneType === 'Server Room'"
+          },
+          "name":"Server Room Filter",
+          "clazz":"org.thingsboard.server.extensions.core.filter.DeviceAttributesFilter"
+        },
+        {
+          "configuration":{
+            "filter":"(\n    typeof temperature !== 'undefined' \n    && (temperature <= 10 || temperature >= 25)\n)\n|| \n(\n    typeof humidity !== 'undefined' \n    && (humidity <= 40 || humidity >= 60)\n)"
+          },
+          "name":"Humidity & Temperature Filter",
+          "clazz":"org.thingsboard.server.extensions.core.filter.DeviceTelemetryFilter"
+        }
+      ],
+      "processor":{
+        "configuration":{
+          "alarmIdTemplate":"[$date.get('yyyy-MM-dd HH:mm')] $ss.get('ZoneId') HVAC malfunction detected!",
+          "alarmBodyTemplate":"[$date.get('yyyy-MM-dd HH:mm:ss')] $ss.get('ZoneId') HVAC malfunction detected. \nTemperature - $temperature.valueAsString (°C). \nHumidity - $humidity.valueAsString (%)!"
+        },
+        "clazz":"org.thingsboard.server.extensions.core.processor.AlarmDeduplicationProcessor",
+        "name":"Alarm Processor"
+      },
+      "action":{
+        "configuration":{
+          "sendFlag":"isNewAlarm",
+          "fromTemplate":"$EMAIL",
+          "toTemplate":"$EMAIL",
+          "subjectTemplate":"$alarmId",
+          "bodyTemplate":"$alarmBody"
+        },
+        "clazz":"org.thingsboard.server.extensions.core.action.mail.SendMailAction",
+        "name":"Send Mail Action"
+      },
+      "additionalInfo":{
+        "description":"Monitors humidity and temperature in the server rooms"
+      }
+    },
+    {
+      "name":"Work Space Monitoring Rule",
+      "state":"ACTIVE",
+      "weight":0,
+      "pluginToken":"sendgrid",
+      "filters":[
+        {
+          "configuration":{
+            "messageTypes":[
+              "POST_TELEMETRY"
+            ]
+          },
+          "name":"Telemetry Filter",
+          "clazz":"org.thingsboard.server.extensions.core.filter.MsgTypeFilter"
+        },
+        {
+          "configuration":{
+            "filter":"typeof ss.ZoneType !== 'undefined' \n&& ss.ZoneType === 'Work Space'"
+          },
+          "name":"Work Space Filter",
+          "clazz":"org.thingsboard.server.extensions.core.filter.DeviceAttributesFilter"
+        },
+        {
+          "configuration":{
+            "filter":"(\n    typeof temperature !== 'undefined' \n    && (temperature <= 20 || temperature >= 25)\n)\n|| \n(\n    typeof humidity !== 'undefined' \n    && (humidity <= 30 || humidity >= 70)\n)"
+          },
+          "name":"Humidity & Temperature Filter",
+          "clazz":"org.thingsboard.server.extensions.core.filter.DeviceTelemetryFilter"
+        }
+      ],
+      "processor":{
+        "configuration":{
+          "alarmIdTemplate":"[$date.get('yyyy-MM-dd HH:mm')] $ss.get('ZoneId') HVAC malfunction detected!",
+          "alarmBodyTemplate":"[$date.get('yyyy-MM-dd HH:mm:ss')] $ss.get('ZoneId') HVAC malfunction detected. \nTemperature - $temperature.valueAsString (°C). \nHumidity - $humidity.valueAsString (%)!"
+        },
+        "clazz":"org.thingsboard.server.extensions.core.processor.AlarmDeduplicationProcessor",
+        "name":"Alarm Processor"
+      },
+      "action":{
+        "configuration":{
+          "sendFlag":"isNewAlarm",
+          "fromTemplate":"$EMAIL",
+          "toTemplate":"$EMAIL",
+          "subjectTemplate":"$alarmId",
+          "bodyTemplate":"$alarmBody"
+        },
+        "clazz":"org.thingsboard.server.extensions.core.action.mail.SendMailAction",
+        "name":"Send Mail Action"
+      },
+      "additionalInfo":{
+        "description":"Monitors humidity and temperature in the server rooms"
+      }
+    }
   ]
 }

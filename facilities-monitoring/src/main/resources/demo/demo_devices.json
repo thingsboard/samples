@@ -7,18 +7,71 @@
       }
     },
     {
+      "name":"Building A Work Space",
+      "additionalInfo":{
+        "description":"Work space located in the Building A"
+      }
+    },
+    {
+      "name":"Building A Meeting Room 1",
+      "additionalInfo":{
+        "description":"Meeting Room 1 located in the Building A"
+      }
+    },
+    {
+      "name":"Building A Meeting Room 2",
+      "additionalInfo":{
+        "description":"Meeting Room 2 located in the Building A"
+      }
+    },
+    {
       "name":"Building B Server Room",
       "additionalInfo":{
-        "description":"Server Room located in the Building A"
+        "description":"Server Room located in the Building B"
+      }
+    },
+    {
+      "name":"Building B Work Space",
+      "additionalInfo":{
+        "description":"Work space located in the Building B"
+      }
+    },
+    {
+      "name":"Building B Meeting Room 1",
+      "additionalInfo":{
+        "description":"Meeting Room 1 located in the Building B"
+      }
+    },
+    {
+      "name":"Building B Meeting Room 2",
+      "additionalInfo":{
+        "description":"Meeting Room 2 located in the Building B"
       }
     },
     {
       "name":"Building C Server Room",
       "additionalInfo":{
-        "description":"Server Room located in the Building A"
+        "description":"Server Room located in the Building C"
+      }
+    },
+    {
+      "name":"Building C Work Space",
+      "additionalInfo":{
+        "description":"Work space located in the Building C"
+      }
+    },
+    {
+      "name":"Building C Meeting Room 1",
+      "additionalInfo":{
+        "description":"Meeting Room 1 located in the Building C"
+      }
+    },
+    {
+      "name":"Building C Meeting Room 2",
+      "additionalInfo":{
+        "description":"Meeting Room 2 located in the Building C"
       }
     }
-
   ],
   "customerDevices": [
   ],
@@ -26,8 +79,85 @@
     {
       "deviceName": "Building A Server Room",
       "server": {
-        "ZoneId": "Server Room 123",
+        "ZoneId": "Server Room A",
         "ZoneType": "Server Room"
+      }
+    },
+    {
+      "deviceName": "Building A Work Space",
+      "server": {
+        "ZoneId": "Work Space A",
+        "ZoneType": "Work Space"
+      }
+    },
+    {
+      "deviceName": "Building A Meeting Room 1",
+      "server": {
+        "ZoneId": "Meeting Room A1",
+        "ZoneType": "Meeting Room"
+      }
+    },
+    {
+      "deviceName": "Building A Meeting Room 2",
+      "server": {
+        "ZoneId": "Meeting Room A2",
+        "ZoneType": "Meeting Room"
+      }
+    },
+    {
+      "deviceName": "Building B Server Room",
+      "server": {
+        "ZoneId": "Server Room B",
+        "ZoneType": "Server Room"
+      }
+    },
+    {
+      "deviceName": "Building B Work Space",
+      "server": {
+        "ZoneId": "Work Space B",
+        "ZoneType": "Work Space"
+      }
+    },
+    {
+      "deviceName": "Building B Meeting Room 1",
+      "server": {
+        "ZoneId": "Meeting Room B1",
+        "ZoneType": "Meeting Room"
+      }
+    },
+    {
+      "deviceName": "Building B Meeting Room 2",
+      "server": {
+        "ZoneId": "Meeting Room B2",
+        "ZoneType": "Meeting Room"
+      }
+    },
+    {
+      "deviceName": "Building C Server Room",
+      "server": {
+        "ZoneId": "Server Room C",
+        "ZoneType": "Server Room"
+      }
+    },
+    {
+      "deviceName": "Building C Work Space",
+      "server": {
+        "ZoneId": "Work Space C",
+        "ZoneType": "Work Space"
+      }
+    },
+    {
+      "deviceName": "Building C Meeting Room 1",
+      "server": {
+        "ZoneId": "Meeting Room C1",
+        "ZoneType": "Meeting Room"
+      }
+    },
+    {
+      "deviceName": "Building C Meeting Room 2",
+      "server": {
+        "ZoneId": "Meeting Room C2",
+        "ZoneType": "Meeting Room"
       }
     }
   ]

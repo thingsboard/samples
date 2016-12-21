@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.thingsboard.demo.loader.data;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -72,7 +71,7 @@ public class DemoData {
     private List<Customer> customers = new ArrayList<>();
     private List<Device> devices = new ArrayList<>();
     private Map<String, String> customerDevices = new HashMap<>();
-    private Map<String, Map<String,JsonNode>> devicesAttributes = new HashMap<>();
+    private Map<String, Map<String, JsonNode>> devicesAttributes = new HashMap<>();
 
     private List<Dashboard> dashboards = new ArrayList<>();
 
@@ -144,11 +143,11 @@ public class DemoData {
         readData(email, pluginsContent, rulesContent, customersContent, devicesContent, dashboardsContent);
     }
 
-    private InputStream getResourceAsStream( String resource ) {
+    private InputStream getResourceAsStream(String resource) {
         final InputStream in
-                = getContextClassLoader().getResourceAsStream( resource );
+                = getContextClassLoader().getResourceAsStream(resource);
 
-        return in == null ? getClass().getResourceAsStream( resource ) : in;
+        return in == null ? getClass().getResourceAsStream(resource) : in;
 
     }
 
@@ -156,12 +155,12 @@ public class DemoData {
         return Thread.currentThread().getContextClassLoader();
     }
 
-    private List<String> getResourceFiles( String path ) throws IOException {
+    private List<String> getResourceFiles(String path) throws IOException {
         List<String> filenames = new ArrayList<>();
         ClassLoader cl = this.getClass().getClassLoader();
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(cl);
-        Resource[] resources = resolver.getResources("classpath*:" + path + "/*.json") ;
-        for (Resource resource: resources){
+        Resource[] resources = resolver.getResources("classpath*:" + path + "/*.json");
+        for (Resource resource : resources) {
             filenames.add(path + "/" + resource.getFilename());
         }
         return filenames;
@@ -191,7 +190,7 @@ public class DemoData {
                     customersContent = IOUtils.toByteArray(archInput);
                 } else if (name.equals(DEMO_DEVICES_JSON)) {
                     devicesContent = IOUtils.toByteArray(archInput);
-                } else if (name.startsWith(DASHBOARDS_DIR+"/")) {
+                } else if (name.startsWith(DASHBOARDS_DIR + "/")) {
                     byte[] dashboardContent = IOUtils.toByteArray(archInput);
                     dashboardsContent.add(dashboardContent);
                 }
@@ -238,8 +237,16 @@ public class DemoData {
             rulesArray.forEach(
                     jsonNode -> {
                         try {
-                            RuleMetaData rule = objectMapper.treeToValue(jsonNode, RuleMetaData.class);
-                            String newPluginToken = pluginTokenMap.get(rule.getPluginToken());
+                            String jsonBody = objectMapper.writeValueAsString(jsonNode);
+                            jsonBody = jsonBody.replaceAll("\\$EMAIL", email);
+                            RuleMetaData rule = objectMapper.treeToValue(objectMapper.readTree(jsonBody), RuleMetaData.class);
+                            String newPluginToken;
+                            // Need to be able to reference system plugins.
+                            if (pluginTokenMap.containsKey(rule.getPluginToken())) {
+                                newPluginToken = pluginTokenMap.get(rule.getPluginToken());
+                            } else {
+                                newPluginToken = rule.getPluginToken();
+                            }
                             if (newPluginToken != null) {
                                 rule.setPluginToken(newPluginToken);
                             }
@@ -299,7 +306,7 @@ public class DemoData {
             deviceAttributesJson.forEach(
                     jsonNode -> {
                         String deviceName = jsonNode.get("deviceName").asText();
-                        Map<String,JsonNode> attributesMap = new HashMap<>();
+                        Map<String, JsonNode> attributesMap = new HashMap<>();
                         if (jsonNode.has("server")) {
                             JsonNode serverAttributes = jsonNode.get("server");
                             attributesMap.put(DataConstants.SERVER_SCOPE, serverAttributes);
@@ -344,7 +351,7 @@ public class DemoData {
                             savedPlugin = restTemplate.postForObject(baseUrl + "/api/plugin", plugin, PluginMetaData.class);
                         }
                         if (savedPlugin.getState() == ComponentLifecycleState.SUSPENDED) {
-                            restTemplate.postForLocation(baseUrl + "/api/plugin/" + savedPlugin.getId().getId().toString()+"/activate", null);
+                            restTemplate.postForLocation(baseUrl + "/api/plugin/" + savedPlugin.getId().getId().toString() + "/activate", null);
                         }
                     } catch (Exception e) {
                         log.error("Unable to upload plugin!");
@@ -360,7 +367,8 @@ public class DemoData {
                         TextPageData<RuleMetaData> rules;
                         ResponseEntity<TextPageData<RuleMetaData>> entity =
                                 restTemplate.exchange(baseUrl + "/api/rule?limit={limit}&textSearch={textSearch}", HttpMethod.GET, null,
-                                        new ParameterizedTypeReference<TextPageData<RuleMetaData>>() {}, 1000, rule.getName());
+                                        new ParameterizedTypeReference<TextPageData<RuleMetaData>>() {
+                                        }, 1000, rule.getName());
                         rules = entity.getBody();
                         if (rules.getData().size() > 0) {
                             savedRule = rules.getData().get(0);
@@ -369,7 +377,7 @@ public class DemoData {
                             savedRule = restTemplate.postForObject(baseUrl + "/api/rule", rule, RuleMetaData.class);
                         }
                         if (savedRule.getState() == ComponentLifecycleState.SUSPENDED) {
-                            restTemplate.postForLocation(baseUrl + "/api/rule/" + savedRule.getId().getId().toString()+"/activate", null);
+                            restTemplate.postForLocation(baseUrl + "/api/rule/" + savedRule.getId().getId().toString() + "/activate", null);
                         }
                     } catch (Exception e) {
                         log.error("Unable to upload rule!");
@@ -386,7 +394,8 @@ public class DemoData {
                         TextPageData<Customer> customers;
                         ResponseEntity<TextPageData<Customer>> entity =
                                 restTemplate.exchange(baseUrl + "/api/customers?limit={limit}&textSearch={textSearch}", HttpMethod.GET, null,
-                                        new ParameterizedTypeReference<TextPageData<Customer>>() {}, 1000, customer.getTitle());
+                                        new ParameterizedTypeReference<TextPageData<Customer>>() {
+                                        }, 1000, customer.getTitle());
                         customers = entity.getBody();
                         if (customers.getData().size() > 0) {
                             savedCustomer = customers.getData().get(0);
@@ -416,7 +425,8 @@ public class DemoData {
                         if (customerId != null) {
                             ResponseEntity<TextPageData<Device>> entity =
                                     restTemplate.exchange(baseUrl + "/api/customer/{customerId}/devices?limit={limit}&textSearch={textSearch}", HttpMethod.GET, null,
-                                            new ParameterizedTypeReference<TextPageData<Device>>() {}, customerId.getId().toString(), 1000, device.getName());
+                                            new ParameterizedTypeReference<TextPageData<Device>>() {
+                                            }, customerId.getId().toString(), 1000, device.getName());
                             devices = entity.getBody();
                             if (devices.getData().size() > 0) {
                                 savedDevice = devices.getData().get(0);
@@ -470,7 +480,8 @@ public class DemoData {
                         TextPageData<Dashboard> dashboards;
                         ResponseEntity<TextPageData<Dashboard>> entity =
                                 restTemplate.exchange(baseUrl + "/api/tenant/dashboards?limit={limit}&textSearch={textSearch}", HttpMethod.GET, null,
-                                        new ParameterizedTypeReference<TextPageData<Dashboard>>() {}, 1000, dashboard.getTitle());
+                                        new ParameterizedTypeReference<TextPageData<Dashboard>>() {
+                                        }, 1000, dashboard.getTitle());
                         dashboards = entity.getBody();
                         if (dashboards.getData().size() > 0) {
                             savedDashboard = dashboards.getData().get(0);
@@ -483,7 +494,7 @@ public class DemoData {
                                         String aliasName = jsonNode.get("alias").asText();
                                         DeviceId deviceId = deviceIdMap.get(aliasName);
                                         if (deviceId != null) {
-                                            ((ObjectNode)jsonNode).put("deviceId", deviceId.getId().toString());
+                                            ((ObjectNode) jsonNode).put("deviceId", deviceId.getId().toString());
                                         }
                                     }
                             );

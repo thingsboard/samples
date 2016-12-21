@@ -29,6 +29,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by ashvayka on 21.12.16.
@@ -45,58 +46,16 @@ public class MqttClientEmulator {
     private ScheduledFuture<?> task;
 
     private long period;
-    private volatile boolean anomalyTrigger;
+    private AtomicInteger mulfunctionIterations = new AtomicInteger(0);
 
-    public MqttClientEmulator(ScheduledExecutorService executor, long period, String uri, String deviceToken) throws Exception {
+    public MqttClientEmulator(ScheduledExecutorService executor, long period, String uri, String deviceName, String deviceToken) throws Exception {
         this.executor = executor;
         this.period = period;
-        this.client = new SampleMqttClient(uri, deviceToken);
+        this.client = new SampleMqttClient(uri, deviceName, deviceToken);
     }
 
-    public static void main(String[] args) throws Exception {
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(4);
-
-        MqttClientEmulator deviceA = new MqttClientEmulator(executor, TimeUnit.SECONDS.toMillis(1), "tcp://demo.thingsboard.io:1883", "oCVqSIVBu2fdQjgn0xgp");
-        MqttClientEmulator deviceB = new MqttClientEmulator(executor, TimeUnit.SECONDS.toMillis(1), "tcp://demo.thingsboard.io:1883", "hi8u361KZoqeeo0NRchk");
-        MqttClientEmulator deviceC = new MqttClientEmulator(executor, TimeUnit.SECONDS.toMillis(1), "tcp://demo.thingsboard.io:1883", "9NhGeUhUsJ4FvvvmaEHV");
-
-//        TelemetryDescriptor temperature = new TelemetryDescriptor("temperature", null, Double.valueOf(100.0), Double.valueOf(20.0), Double.valueOf(25.0));
-//        TelemetryDescriptor humidity = new TelemetryDescriptor("humidity", null, Double.valueOf(80.0), Double.valueOf(55.0), Double.valueOf(65.0));
-//
-//        deviceA.setTelemetry(Arrays.asList(temperature, humidity));
-//        deviceB.setTelemetry(Arrays.asList(temperature, humidity));
-//        deviceC.setTelemetry(Arrays.asList(temperature, humidity));
-
-        Map<String, Object> attributesA = new HashMap<>();
-        attributesA.put("latitude", 37.7750924);
-        attributesA.put("longitude", -122.4185093);
-        deviceA.setAttributes(attributesA);
-
-        Map<String, Object> attributesB = new HashMap<>();
-        attributesB.put("latitude", 37.776812);
-        attributesB.put("longitude", -122.419043);
-        deviceB.setAttributes(attributesB);
-
-        Map<String, Object> attributesC = new HashMap<>();
-        attributesC.put("latitude", 37.7768);
-        attributesC.put("longitude", -122.4166);
-        deviceC.setAttributes(attributesC);
-
-        deviceA.connect();
-        deviceB.connect();
-        deviceC.connect();
-
-        deviceA.start();
-        deviceB.start();
-        deviceC.start();
-
-        Thread.sleep(60000);
-
-        deviceA.stop();
-        deviceB.stop();
-        deviceC.stop();
-
-        executor.shutdownNow();
+    public void simulateMalfunction() {
+        mulfunctionIterations.addAndGet(30);
     }
 
     public void connect() throws Exception {
@@ -110,9 +69,9 @@ public class MqttClientEmulator {
                 Map<String, Object> values = new HashMap<>();
 
                 final boolean anomaly;
-                if (anomalyTrigger) {
+                if (mulfunctionIterations.get() > 0) {
                     anomaly = true;
-                    anomalyTrigger = false;
+                    mulfunctionIterations.decrementAndGet();
                 } else {
                     anomaly = false;
                 }
@@ -146,5 +105,4 @@ public class MqttClientEmulator {
         });
         return json;
     }
-
 }

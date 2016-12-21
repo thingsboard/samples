@@ -1,25 +1,77 @@
 {
-  "devices": [
-    {
-      "name": "Building A Server Room",
-      "attributes": {
-        "latitude": 37.7750924,
-        "longitude": -122.4185093
-      },
-      "timeseries": [
-        {
-          "key": "temperature",
-          "anomalyValue": 100.0,
-          "minValue": 20.0,
-          "maxValue": 25.0
-        },
-        {
-          "key": "humidity",
-          "anomalyValue": 80.0,
-          "minValue": 55.0,
-          "maxValue": 65.0
-        }
-      ]
+  "devices":
+  [
+    { "name":"Building A Server Room",
+      "attributes":{"latitude":37.7750924,"longitude":-122.4185093},
+      "timeseries":[
+        {"key":"temperature","anomalyValue":45.0,"minValue":12.0,"maxValue":23.0},
+        {"key":"humidity","anomalyValue":70.0,"minValue":41.0,"maxValue":59.0}]
+    },
+    { "name":"Building A Work Space",
+      "attributes":{"latitude":37.7750924,"longitude":-122.4185093},
+      "timeseries":[
+        {"key":"temperature","anomalyValue":29.0,"minValue":21.0,"maxValue":24.0},
+        {"key":"humidity","anomalyValue":72.0,"minValue":35.0,"maxValue":65.0}]
+    },
+    { "name":"Building A Meeting Room 1",
+      "attributes":{"latitude":37.7750924,"longitude":-122.4185093},
+      "timeseries":[
+        {"key":"temperature","anomalyValue":20.0,"minValue":21.5,"maxValue":23.5},
+        {"key":"humidity","anomalyValue":30.0,"minValue":37.0,"maxValue":45.0}]
+    },
+    { "name":"Building A Meeting Room 2",
+      "attributes":{"latitude":37.7750924,"longitude":-122.4185093},
+      "timeseries":[
+        {"key":"temperature","anomalyValue":20.0,"minValue":21.5,"maxValue":23.5},
+        {"key":"humidity","anomalyValue":30.0,"minValue":37.0,"maxValue":45.0}]
+    },
+    { "name":"Building B Server Room",
+      "attributes":{"latitude":37.776812,"longitude":-122.419043},
+      "timeseries":[
+        {"key":"temperature","anomalyValue":45.0,"minValue":12.0,"maxValue":23.0},
+        {"key":"humidity","anomalyValue":70.0,"minValue":41.0,"maxValue":59.0}]
+    },
+    { "name":"Building B Work Space",
+      "attributes":{"latitude":37.776812,"longitude":-122.419043},
+      "timeseries":[
+        {"key":"temperature","anomalyValue":29.0,"minValue":21.0,"maxValue":24.0},
+        {"key":"humidity","anomalyValue":72.0,"minValue":35.0,"maxValue":65.0}]
+    },
+    { "name":"Building B Meeting Room 1",
+      "attributes":{"latitude":37.776812,"longitude":-122.419043},
+      "timeseries":[
+        {"key":"temperature","anomalyValue":20.0,"minValue":21.5,"maxValue":23.5},
+        {"key":"humidity","anomalyValue":30.0,"minValue":37.0,"maxValue":45.0}]
+    },
+    { "name":"Building B Meeting Room 2",
+      "attributes":{"latitude":37.776812,"longitude":-122.419043},
+      "timeseries":[
+        {"key":"temperature","anomalyValue":20.0,"minValue":21.5,"maxValue":23.5},
+        {"key":"humidity","anomalyValue":30.0,"minValue":37.0,"maxValue":45.0}]
+    },
+    { "name":"Building C Server Room",
+      "attributes":{"latitude":37.7768,"longitude":-122.4166},
+      "timeseries":[
+        {"key":"temperature","anomalyValue":45.0,"minValue":12.0,"maxValue":23.0},
+        {"key":"humidity","anomalyValue":70.0,"minValue":41.0,"maxValue":59.0}]
+    },
+    { "name":"Building C Work Space",
+      "attributes":{"latitude":37.7768,"longitude":-122.4166},
+      "timeseries":[
+        {"key":"temperature","anomalyValue":29.0,"minValue":21.0,"maxValue":24.0},
+        {"key":"humidity","anomalyValue":72.0,"minValue":35.0,"maxValue":65.0}]
+    },
+    { "name":"Building C Meeting Room 1",
+      "attributes":{"latitude":37.7768,"longitude":-122.4166},
+      "timeseries":[
+        {"key":"temperature","anomalyValue":20.0,"minValue":21.5,"maxValue":23.5},
+        {"key":"humidity","anomalyValue":30.0,"minValue":37.0,"maxValue":45.0}]
+    },
+    { "name":"Building C Meeting Room 2",
+      "attributes":{"latitude":37.7768,"longitude":-122.4166},
+      "timeseries":[
+        {"key":"temperature","anomalyValue":20.0,"minValue":21.5,"maxValue":23.5},
+        {"key":"humidity","anomalyValue":30.0,"minValue":37.0,"maxValue":45.0}]
     }
   ]
 }
