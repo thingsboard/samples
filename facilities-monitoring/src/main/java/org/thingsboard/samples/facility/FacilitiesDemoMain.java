@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.thingsboard.demo.loader.ConsoleReader;
 import org.thingsboard.demo.loader.DemoLoader;
 import org.thingsboard.demo.loader.data.DemoData;
+import org.thingsboard.server.common.data.Dashboard;
 import org.thingsboard.server.common.data.Device;
 import org.thingsboard.server.common.data.security.DeviceCredentials;
 
@@ -62,12 +63,12 @@ public class FacilitiesDemoMain {
 
             demoLoader.loadDemoFromClasspath("demo");
             DemoData data = demoLoader.getDemoData();
-            Map<String, Device> demoDevices = data.getDemoDevices().stream().collect(Collectors.toMap(Device::getName, Function.identity()));
+            Map<String, Device> demoDevices = data.getevices().stream().collect(Collectors.toMap(Device::getName, Function.identity()));
 
             List<EmulatorDescriptor> descriptors = EmulatorDescriptorLoader.loadDescriptors();
 
 
-            List<MqttClientEmulator> emulators = new ArrayList<>(data.getDemoDevices().size());
+            List<MqttClientEmulator> emulators = new ArrayList<>(data.getevices().size());
 
             for (EmulatorDescriptor descriptor : descriptors) {
                 Device device = demoDevices.get(descriptor.getName());
@@ -83,9 +84,20 @@ public class FacilitiesDemoMain {
                 emulator.start();
             }
 
+            Map<String, Dashboard> dashboards = data.getDashboards().stream().collect(Collectors.toMap(Dashboard::getTitle, Function.identity()));
+            String mainDashboardId = dashboards.get("Buildings on the Map").getId().getId().toString();
+
+            log.info("");
+            log.info("");
+            log.info("***************************************************************");
+            log.info("Congratulations! Your demo scenario has been provisioned!");
+            log.info("Open {}/dashboards/{} to see your data.", httpUrl, mainDashboardId);
+            log.info("***************************************************************");
+            log.info("");
+            log.info("");
             boolean quit = false;
             while (!quit) {
-                String chars = ConsoleReader.readLine("Press Q to quite or M to simulate malfunction: ");
+                String chars = ConsoleReader.readLine("Press Q to quit or M to simulate malfunction: ");
                 if ("Q".equalsIgnoreCase(chars)) {
                     quit = true;
                 } else if ("M".equalsIgnoreCase(chars)) {

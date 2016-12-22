@@ -75,14 +75,17 @@ public class DemoData {
 
     private List<Dashboard> dashboards = new ArrayList<>();
 
-    private List<Device> loadedDevices = new ArrayList<>();
     private Map<DeviceId, DeviceCredentials> loadedDevicesCredentialsMap = new HashMap<>();
 
     private DemoData() {
     }
 
-    public List<Device> getDemoDevices() {
-        return loadedDevices;
+    public List<Dashboard> getDashboards() {
+        return dashboards;
+    }
+
+    public List<Device> getevices() {
+        return devices;
     }
 
     public DeviceCredentials getDeviceCredentialsByDeviceId(DeviceId deviceId) {
@@ -411,6 +414,8 @@ public class DemoData {
                 }
         );
 
+        List<Device> loadedDevices = new ArrayList<>();
+
         Map<String, DeviceId> deviceIdMap = new HashMap<>();
         devices.forEach(
                 device -> {
@@ -473,6 +478,8 @@ public class DemoData {
                 }
         );
 
+        devices = loadedDevices;
+
         Map<String, Dashboard> pendingDashboards = dashboards.stream().collect(Collectors.toMap(Dashboard::getTitle, Function.identity()));
         Map<String, Dashboard> savedDashboards = new HashMap<>();
         while (pendingDashboards.size() != 0) {
@@ -514,6 +521,8 @@ public class DemoData {
                 break;
             }
         }
+
+        dashboards = new ArrayList<>(savedDashboards.values());
     }
 
     private Optional<String> resolveLinks(Map<String, Dashboard> savedDashboards, JsonNode dashboardConfiguration) throws JsonProcessingException {
