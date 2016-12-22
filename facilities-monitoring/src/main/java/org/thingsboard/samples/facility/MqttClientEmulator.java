@@ -55,7 +55,7 @@ public class MqttClientEmulator {
     }
 
     public void simulateMalfunction() {
-        mulfunctionIterations.addAndGet(30);
+        mulfunctionIterations.addAndGet(1);
     }
 
     public void connect() throws Exception {
