@@ -38,6 +38,7 @@ public class MqttClientEmulator {
 
     private final ScheduledExecutorService executor;
     private final SampleMqttClient client;
+    private final String deviceName;
 
     private Map<String, Object> attributes;
     private List<TelemetryDescriptor> telemetry;
@@ -49,6 +50,7 @@ public class MqttClientEmulator {
     public MqttClientEmulator(ScheduledExecutorService executor, long period, String uri, String deviceName, String deviceToken) throws Exception {
         this.executor = executor;
         this.period = period;
+        this.deviceName = deviceName;
         this.client = new SampleMqttClient(uri, deviceName, deviceToken);
     }
 

@@ -52,8 +52,8 @@ public class FacilitiesDemoMain {
 
             boolean authorized = false;
             while (!authorized) {
-                String username = ConsoleReader.readLine("Enter Tenant Admin username: ");
-                String password = new String(ConsoleReader.readPassword("Enter Tenant Admin password: "));
+                String username = ConsoleReader.readLine("Enter Tenant Admin (Live Demo) username: ");
+                String password = new String(ConsoleReader.readPassword("Enter Tenant Admin (Live Demo) password: "));
                 authorized = demoLoader.authorize(username, password);
                 if (!authorized) {
                     System.err.println("Bad username or password!");
@@ -85,12 +85,12 @@ public class FacilitiesDemoMain {
 
             boolean quit = false;
             while (!quit) {
-                String chars = ConsoleReader.readLine("Press Q to quite or M to simulate malfunction");
+                String chars = ConsoleReader.readLine("Press Q to quite or M to simulate malfunction: ");
                 if ("Q".equalsIgnoreCase(chars)) {
                     quit = true;
                 } else if ("M".equalsIgnoreCase(chars)) {
                     for (int i = 0; i < descriptors.size(); i++) {
-                        System.out.println("[" + i + "]: " + descriptors.get(i).getName());
+                        log.info("[" + i + "]: " + descriptors.get(i).getName());
                     }
                     String deviceNumberStr = ConsoleReader.readLine("Please input device number (from 0 to " + (descriptors.size() - 1) + "): ");
                     try {
@@ -100,8 +100,9 @@ public class FacilitiesDemoMain {
                         }
                         MqttClientEmulator emulator = emulators.get(deviceNumber);
                         emulator.simulateMalfunction();
+                        log.info("Malfunction simulation started for device: {}. Check your mail!", emulator.getDeviceName());
                     } catch (NumberFormatException e) {
-                        System.out.println("Invalid device number: " + deviceNumberStr + " !");
+                        log.info("Invalid device number: " + deviceNumberStr + " !");
                     }
                 }
             }

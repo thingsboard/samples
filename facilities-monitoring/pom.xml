@@ -102,7 +102,7 @@
                         <configuration>
                             <archive>
                                 <manifest>
-                                    <mainClass>org.thingsboard.demo.loader.DemoLoaderMain</mainClass>
+                                    <mainClass>org.thingsboard.samples.facility.FacilitiesDemoMain</mainClass>
                                 </manifest>
                             </archive>
                             <descriptorRefs>
