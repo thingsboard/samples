@@ -180,14 +180,14 @@
                 "latKeyName":"latitude",
                 "lngKeyName":"longitude",
                 "showLabel":true,
-                "tooltipPattern":"<div style=\"margin: 5px;\">Server room:<br/><b>Temperature:</b> ${temperature:1}°C<br/><b>Humidity:</b> ${humidity:1}%<br/><a href=\"http://demo.thingsboard.io/dashboards/$BUILDING_A_FLOOR_PLAN_LINK\">Floor Plan</a><br/><a href=\"http://demo.thingsboard.io/dashboards/$BUILDING_B_HISTORICAL_DATA_LINK\">Historical Data</a></div>"
+                "tooltipPattern":"<div style=\"margin: 5px;\">Server room:<br/><b>Temperature:</b> ${temperature:1}°C<br/><b>Humidity:</b> ${humidity:1}%<br/><a href=\"http://demo.thingsboard.io/dashboards/$BUILDING_B_FLOOR_PLAN_LINK\">Floor Plan</a><br/><a href=\"http://demo.thingsboard.io/dashboards/$BUILDING_B_HISTORICAL_DATA_LINK\">Historical Data</a></div>"
               },
               {
                 "label":"Building C",
                 "latKeyName":"latitude",
                 "lngKeyName":"longitude",
                 "showLabel":true,
-                "tooltipPattern":"<div style=\"margin: 5px;\">Server room:<br/><b>Temperature:</b> ${temperature:1}°C<br/><b>Humidity:</b> ${humidity:1}%<br/><a href=\"http://demo.thingsboard.io/dashboards/$BUILDING_A_FLOOR_PLAN_LINK\">Floor Plan</a><br/><a href=\"http://demo.thingsboard.io/dashboards/$BUILDING_C_HISTORICAL_DATA_LINK\">Historical Data</a></div>"
+                "tooltipPattern":"<div style=\"margin: 5px;\">Server room:<br/><b>Temperature:</b> ${temperature:1}°C<br/><b>Humidity:</b> ${humidity:1}%<br/><a href=\"http://demo.thingsboard.io/dashboards/$BUILDING_C_FLOOR_PLAN_LINK\">Floor Plan</a><br/><a href=\"http://demo.thingsboard.io/dashboards/$BUILDING_C_HISTORICAL_DATA_LINK\">Historical Data</a></div>"
               }
             ],
             "fitMapBounds":true,
