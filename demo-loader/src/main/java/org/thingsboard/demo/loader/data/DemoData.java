@@ -1,12 +1,12 @@
 /**
  * Copyright © 2016 The Thingsboard Authors
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,6 +15,7 @@
  */
 package org.thingsboard.demo.loader.data;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -50,10 +51,9 @@ import org.thingsboard.server.common.data.security.DeviceCredentials;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class DemoData {
@@ -473,20 +473,17 @@ public class DemoData {
                 }
         );
 
-        dashboards.forEach(
-                dashboard -> {
+        Map<String, Dashboard> pendingDashboards = dashboards.stream().collect(Collectors.toMap(Dashboard::getTitle, Function.identity()));
+        Map<String, Dashboard> savedDashboards = new HashMap<>();
+        while (pendingDashboards.size() != 0) {
+            Dashboard savedDashboard = null;
+            for (Dashboard dashboard : pendingDashboards.values()) {
+                savedDashboard = getDashboardByName(restTemplate, baseUrl, dashboard);
+                if (savedDashboard == null) {
                     try {
-                        Dashboard savedDashboard = null;
-                        TextPageData<Dashboard> dashboards;
-                        ResponseEntity<TextPageData<Dashboard>> entity =
-                                restTemplate.exchange(baseUrl + "/api/tenant/dashboards?limit={limit}&textSearch={textSearch}", HttpMethod.GET, null,
-                                        new ParameterizedTypeReference<TextPageData<Dashboard>>() {
-                                        }, 1000, dashboard.getTitle());
-                        dashboards = entity.getBody();
-                        if (dashboards.getData().size() > 0) {
-                            savedDashboard = dashboards.getData().get(0);
-                        }
-                        if (savedDashboard == null) {
+                        Optional<String> dashboardConfigurationBody = resolveLinks(savedDashboards, dashboard.getConfiguration());
+                        if (dashboardConfigurationBody.isPresent()) {
+                            dashboard.setConfiguration(objectMapper.readTree(dashboardConfigurationBody.get()));
                             JsonNode dashboardConfiguration = dashboard.getConfiguration();
                             JsonNode deviceAliases = dashboardConfiguration.get("deviceAliases");
                             deviceAliases.forEach(
@@ -505,7 +502,51 @@ public class DemoData {
                         log.error("Cause:", e);
                     }
                 }
-        );
+                if (savedDashboard != null) {
+                    break;
+                }
+            }
+            if (savedDashboard != null) {
+                savedDashboards.put(savedDashboard.getTitle(), savedDashboard);
+                pendingDashboards.remove(savedDashboard.getTitle());
+            } else {
+                log.error("Unable to upload dashboards due to unresolved references!");
+                break;
+            }
+        }
+    }
 
+    private Optional<String> resolveLinks(Map<String, Dashboard> savedDashboards, JsonNode dashboardConfiguration) throws JsonProcessingException {
+        String dashboardConfigurationBody = objectMapper.writeValueAsString(dashboardConfiguration);
+        boolean resolved = true;
+        for (Dashboard other : dashboards) {
+            String otherLink = "$" + other.getTitle().toUpperCase().replace(' ', '_') + "_LINK";
+            if (dashboardConfigurationBody.contains(otherLink)) {
+                if (savedDashboards.containsKey(other.getTitle())) {
+                    dashboardConfigurationBody = dashboardConfigurationBody.replace(otherLink, savedDashboards.get(other.getTitle()).getId().getId().toString());
+                } else {
+                    resolved = false;
+                    break;
+                }
+            }
+        }
+        return resolved ? Optional.of(dashboardConfigurationBody) : Optional.empty();
+    }
+
+    private Dashboard getDashboardByName(RestTemplate restTemplate, String baseUrl, Dashboard dashboard) {
+        Dashboard savedDashboard = null;
+        TextPageData<Dashboard> dashboards;
+        ResponseEntity<TextPageData<Dashboard>> entity =
+                restTemplate.exchange(baseUrl + "/api/tenant/dashboards?limit={limit}&textSearch={textSearch}", HttpMethod.GET, null,
+                        new ParameterizedTypeReference<TextPageData<Dashboard>>() {
+                        }, 1000, dashboard.getTitle());
+        dashboards = entity.getBody();
+        for (Dashboard saved : dashboards.getData()) {
+            if (saved.getTitle().equalsIgnoreCase(dashboard.getTitle())) {
+                savedDashboard = saved;
+                break;
+            }
+        }
+        return savedDashboard;
     }
 }

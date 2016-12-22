@@ -1,0 +1,358 @@
+{
+  "title": "Building B Historical Data",
+  "configuration": {
+    "description": "Shows last 4 hours of data",
+    "widgets": [
+      {
+        "isSystemType": true,
+        "bundleAlias": "charts",
+        "typeAlias": "basic_timeseries",
+        "type": "timeseries",
+        "title": "New widget",
+        "sizeX": 12,
+        "sizeY": 5,
+        "config": {
+          "datasources": [
+            {
+              "type": "device",
+              "dataKeys": [
+                {
+                  "name": "temperature",
+                  "type": "timeseries",
+                  "label": "Meeting Room 1",
+                  "color": "#0d47a1",
+                  "settings": {
+                    "showLines": true,
+                    "fillLines": false,
+                    "showPoints": false
+                  },
+                  "_hash": 0.04919139044415899
+                }
+              ],
+              "deviceAliasId": "1",
+              "name": "Building B Meeting Room 1"
+            },
+            {
+              "type": "device",
+              "dataKeys": [
+                {
+                  "name": "temperature",
+                  "type": "timeseries",
+                  "label": "Meeting Room 2",
+                  "color": "#2e7d32",
+                  "settings": {
+                    "showLines": true,
+                    "fillLines": false,
+                    "showPoints": false
+                  },
+                  "_hash": 0.942560105075817
+                }
+              ],
+              "deviceAliasId": "2",
+              "name": "Building B Meeting Room 2"
+            },
+            {
+              "type": "device",
+              "dataKeys": [
+                {
+                  "name": "temperature",
+                  "type": "timeseries",
+                  "label": "Work Space",
+                  "color": "#ff6f00",
+                  "settings": {
+                    "showLines": true,
+                    "fillLines": false,
+                    "showPoints": false
+                  },
+                  "_hash": 0.8277714783987011
+                }
+              ],
+              "deviceAliasId": "4",
+              "name": "Building B Work Space"
+            }
+          ],
+          "timewindow": {
+            "realtime": {
+              "timewindowMs": 60000
+            }
+          },
+          "showTitle": true,
+          "backgroundColor": "#fff",
+          "color": "rgba(0, 0, 0, 0.87)",
+          "padding": "8px",
+          "settings": {
+            "shadowSize": 4,
+            "fontColor": "#545454",
+            "fontSize": 7.5,
+            "xaxis": {
+              "showLabels": true,
+              "color": "#545454"
+            },
+            "yaxis": {
+              "showLabels": true,
+              "color": "#545454"
+            },
+            "grid": {
+              "color": "#545454",
+              "tickColor": "#DDDDDD",
+              "verticalLines": true,
+              "horizontalLines": true,
+              "backgroundColor": "#ffffff"
+            }
+          },
+          "title": "Temperature: Work Space & Meeting Rooms"
+        },
+        "row": 0,
+        "col": 0
+      },
+      {
+        "isSystemType": true,
+        "bundleAlias": "charts",
+        "typeAlias": "basic_timeseries",
+        "type": "timeseries",
+        "title": "New widget",
+        "sizeX": 12,
+        "sizeY": 5,
+        "config": {
+          "datasources": [
+            {
+              "type": "device",
+              "dataKeys": [
+                {
+                  "name": "humidity",
+                  "type": "timeseries",
+                  "label": "Meeting Room 1",
+                  "color": "#2196f3",
+                  "settings": {
+                    "showLines": true,
+                    "fillLines": false,
+                    "showPoints": false
+                  },
+                  "_hash": 0.08867828393567656
+                }
+              ],
+              "deviceAliasId": "1",
+              "name": "Building B Meeting Room 1"
+            },
+            {
+              "type": "device",
+              "dataKeys": [
+                {
+                  "name": "humidity",
+                  "type": "timeseries",
+                  "label": "Meeting Room 2",
+                  "color": "#4caf50",
+                  "settings": {
+                    "showLines": true,
+                    "fillLines": false,
+                    "showPoints": false
+                  },
+                  "_hash": 0.2250868047820147
+                }
+              ],
+              "deviceAliasId": "2",
+              "name": "Building B Meeting Room 2"
+            },
+            {
+              "type": "device",
+              "dataKeys": [
+                {
+                  "name": "humidity",
+                  "type": "timeseries",
+                  "label": "Work Space",
+                  "color": "#f44336",
+                  "settings": {
+                    "showLines": true,
+                    "fillLines": false,
+                    "showPoints": false
+                  },
+                  "_hash": 0.9348779652632808
+                }
+              ],
+              "deviceAliasId": "4",
+              "name": "Building B Work Space"
+            }
+          ],
+          "timewindow": {
+            "realtime": {
+              "timewindowMs": 60000
+            }
+          },
+          "showTitle": true,
+          "backgroundColor": "#fff",
+          "color": "rgba(0, 0, 0, 0.87)",
+          "padding": "8px",
+          "settings": {
+            "shadowSize": 4,
+            "fontColor": "#545454",
+            "fontSize": 7.5,
+            "xaxis": {
+              "showLabels": true,
+              "color": "#545454"
+            },
+            "yaxis": {
+              "showLabels": true,
+              "color": "#545454"
+            },
+            "grid": {
+              "color": "#545454",
+              "tickColor": "#DDDDDD",
+              "verticalLines": true,
+              "horizontalLines": true,
+              "backgroundColor": "#ffffff"
+            }
+          },
+          "title": "Humidity: Work Space & Meeting Rooms"
+        },
+        "row": 0,
+        "col": 12
+      },
+      {
+        "isSystemType": true,
+        "bundleAlias": "charts",
+        "typeAlias": "basic_timeseries",
+        "type": "timeseries",
+        "title": "New widget",
+        "sizeX": 12,
+        "sizeY": 5,
+        "config": {
+          "datasources": [
+            {
+              "type": "device",
+              "dataKeys": [
+                {
+                  "name": "temperature",
+                  "type": "timeseries",
+                  "label": "Server Room",
+                  "color": "#00695c",
+                  "settings": {
+                    "showLines": true,
+                    "fillLines": false,
+                    "showPoints": false
+                  },
+                  "_hash": 0.0921993789071831
+                }
+              ],
+              "deviceAliasId": "3",
+              "name": "Building B Server Room"
+            }
+          ],
+          "timewindow": {
+            "realtime": {
+              "timewindowMs": 60000
+            }
+          },
+          "showTitle": true,
+          "backgroundColor": "#fff",
+          "color": "rgba(0, 0, 0, 0.87)",
+          "padding": "8px",
+          "settings": {
+            "shadowSize": 4,
+            "fontColor": "#545454",
+            "fontSize": 7.5,
+            "xaxis": {
+              "showLabels": true,
+              "color": "#545454"
+            },
+            "yaxis": {
+              "showLabels": true,
+              "color": "#545454"
+            },
+            "grid": {
+              "color": "#545454",
+              "tickColor": "#DDDDDD",
+              "verticalLines": true,
+              "horizontalLines": true,
+              "backgroundColor": "#ffffff"
+            }
+          },
+          "title": "Temperature: Server Room"
+        },
+        "row": 5,
+        "col": 0
+      },
+      {
+        "isSystemType": true,
+        "bundleAlias": "charts",
+        "typeAlias": "basic_timeseries",
+        "type": "timeseries",
+        "title": "New widget",
+        "sizeX": 12,
+        "sizeY": 5,
+        "config": {
+          "datasources": [
+            {
+              "type": "device",
+              "dataKeys": [
+                {
+                  "name": "humidity",
+                  "type": "timeseries",
+                  "label": "Server Room",
+                  "color": "#5c6bc0",
+                  "settings": {
+                    "showLines": true,
+                    "fillLines": false,
+                    "showPoints": false
+                  },
+                  "_hash": 0.6460611694523262
+                }
+              ],
+              "deviceAliasId": "3",
+              "name": "Building B Server Room"
+            }
+          ],
+          "timewindow": {
+            "realtime": {
+              "timewindowMs": 60000
+            }
+          },
+          "showTitle": true,
+          "backgroundColor": "#fff",
+          "color": "rgba(0, 0, 0, 0.87)",
+          "padding": "8px",
+          "settings": {
+            "shadowSize": 4,
+            "fontColor": "#545454",
+            "fontSize": 7.5,
+            "xaxis": {
+              "showLabels": true,
+              "color": "#545454"
+            },
+            "yaxis": {
+              "showLabels": true,
+              "color": "#545454"
+            },
+            "grid": {
+              "color": "#545454",
+              "tickColor": "#DDDDDD",
+              "verticalLines": true,
+              "horizontalLines": true,
+              "backgroundColor": "#ffffff"
+            }
+          },
+          "title": "Humidity: Server Room"
+        },
+        "row": 5,
+        "col": 12
+      }
+    ],
+    "deviceAliases": {
+      "1": {
+        "alias": "Building B Meeting Room 1",
+        "deviceId": "d01b5690-c845-11e6-9d92-03f0f8360431"
+      },
+      "2": {
+        "alias": "Building B Meeting Room 2",
+        "deviceId": "d0af3220-c845-11e6-9d92-03f0f8360431"
+      },
+      "3": {
+        "alias": "Building B Server Room",
+        "deviceId": "cef54d20-c845-11e6-9d92-03f0f8360431"
+      },
+      "4": {
+        "alias": "Building B Work Space",
+        "deviceId": "cf8976d0-c845-11e6-9d92-03f0f8360431"
+      }
+    }
+  }
+}

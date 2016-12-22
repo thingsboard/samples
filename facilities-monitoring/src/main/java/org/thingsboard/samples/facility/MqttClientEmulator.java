@@ -21,11 +21,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -76,7 +74,7 @@ public class MqttClientEmulator {
                     anomaly = false;
                 }
 
-                telemetry.forEach(t -> t.getValue(anomaly).ifPresent(v -> values.put(t.getKey(), v)));
+                telemetry.forEach(t -> t.getNextValue(anomaly).ifPresent(v -> values.put(t.getKey(), v)));
 
                 client.publishTelemetry(toJson(values));
             } catch (Exception e) {

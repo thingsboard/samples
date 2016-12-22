@@ -1,12 +1,12 @@
 /**
  * Copyright © 2016 The Thingsboard Authors
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,9 +16,7 @@
 
 package org.thingsboard.samples.facility;
 
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Optional;
@@ -33,10 +31,16 @@ public class TelemetryDescriptor<T> {
 
     @Getter
     private String key;
-    @Setter private T defaultValue;
-    @Setter private T anomalyValue;
-    @Setter private T minValue;
-    @Setter private T maxValue;
+    @Setter
+    private T defaultValue;
+    @Setter
+    private T anomalyValue;
+    @Setter
+    private T minValue;
+    @Setter
+    private T maxValue;
+
+    private Double previousValue;
 
     public TelemetryDescriptor() {
 
@@ -46,7 +50,7 @@ public class TelemetryDescriptor<T> {
         this.key = key;
     }
 
-    public Optional<T> getValue(boolean anomaly) {
+    public Optional<T> getNextValue(boolean anomaly) {
         if (anomaly) {
             if (anomalyValue != null) {
                 return Optional.of(anomalyValue);
@@ -59,11 +63,15 @@ public class TelemetryDescriptor<T> {
             if (Double.class.isInstance(minValue) && Double.class.isInstance(maxValue)) {
                 Double min = Double.class.cast(minValue);
                 Double max = Double.class.cast(maxValue);
-                return Optional.of((T) Double.valueOf(min + (max - min) * random.nextDouble()));
+
+                previousValue = generateNextValue((Double) previousValue, min, max);
+                return Optional.of((T) previousValue);
             } else if (Long.class.isInstance(minValue) && Long.class.isInstance(maxValue)) {
                 Long min = Long.class.cast(minValue);
                 Long max = Long.class.cast(maxValue);
-                return Optional.of((T) Long.valueOf(Double.valueOf(min + (max - min) * random.nextDouble()).longValue()));
+
+                previousValue = generateNextValue(previousValue, min.doubleValue(), max.doubleValue());
+                return Optional.of((T) Long.valueOf(previousValue.longValue()));
             }
         }
         return Optional.empty();
@@ -73,4 +81,19 @@ public class TelemetryDescriptor<T> {
         return Optional.ofNullable(anomalyValue);
     }
 
+
+    private Double generateNextValue(Double previous, Double min, Double max) {
+        if (previous == null) {
+            previous = min + (max - min) * random.nextDouble();
+        }
+
+        Double next = previous + ((Math.random() - 0.5) * (max - min)) * 0.1;
+
+        if (next > max) {
+            next = max;
+        } else if (next < min) {
+            next = min;
+        }
+        return next;
+    }
 }

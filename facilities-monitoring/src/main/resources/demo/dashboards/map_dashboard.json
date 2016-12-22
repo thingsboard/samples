@@ -1,0 +1,217 @@
+{
+  "title":"Buildings on the Map",
+  "configuration":{
+    "widgets":[
+      {
+        "isSystemType":true,
+        "bundleAlias":"maps",
+        "typeAlias":"google_maps",
+        "type":"latest",
+        "title":"New widget",
+        "sizeX":22,
+        "sizeY":11,
+        "config":{
+          "datasources":[
+            {
+              "type":"device",
+              "dataKeys":[
+                {
+                  "name":"humidity",
+                  "type":"timeseries",
+                  "label":"humidity",
+                  "color":"#f44336",
+                  "settings":{
+
+                  },
+                  "_hash":0.7772654238125851
+                },
+                {
+                  "name":"temperature",
+                  "type":"timeseries",
+                  "label":"temperature",
+                  "color":"#ffc107",
+                  "settings":{
+
+                  },
+                  "_hash":0.952878225421123
+                },
+                {
+                  "name":"latitude",
+                  "type":"attribute",
+                  "label":"latitude",
+                  "color":"#2196f3",
+                  "settings":{
+
+                  },
+                  "_hash":0.1607796399862227
+                },
+                {
+                  "name":"longitude",
+                  "type":"attribute",
+                  "label":"longitude",
+                  "color":"#4caf50",
+                  "settings":{
+
+                  },
+                  "_hash":0.8579266160652521
+                }
+              ],
+              "deviceAliasId":"1",
+              "name":"Building A Server Room"
+            },
+            {
+              "type":"device",
+              "dataKeys":[
+                {
+                  "name":"humidity",
+                  "type":"timeseries",
+                  "label":"humidity",
+                  "color":"#607d8b",
+                  "settings":{
+
+                  },
+                  "_hash":0.01213202186092599
+                },
+                {
+                  "name":"temperature",
+                  "type":"timeseries",
+                  "label":"temperature",
+                  "color":"#9c27b0",
+                  "settings":{
+
+                  },
+                  "_hash":0.21628282726478032
+                },
+                {
+                  "name":"latitude",
+                  "type":"attribute",
+                  "label":"latitude",
+                  "color":"#8bc34a",
+                  "settings":{
+
+                  },
+                  "_hash":0.15358420422298313
+                },
+                {
+                  "name":"longitude",
+                  "type":"attribute",
+                  "label":"longitude",
+                  "color":"#3f51b5",
+                  "settings":{
+
+                  },
+                  "_hash":0.044986451549714035
+                }
+              ],
+              "deviceAliasId":"2",
+              "name":"Building B Server Room"
+            },
+            {
+              "type":"device",
+              "dataKeys":[
+                {
+                  "name":"humidity",
+                  "type":"timeseries",
+                  "label":"humidity",
+                  "color":"#e91e63",
+                  "settings":{
+
+                  },
+                  "_hash":0.8956092612355506
+                },
+                {
+                  "name":"temperature",
+                  "type":"timeseries",
+                  "label":"temperature",
+                  "color":"#ffeb3b",
+                  "settings":{
+
+                  },
+                  "_hash":0.775810674023401
+                },
+                {
+                  "name":"latitude",
+                  "type":"attribute",
+                  "label":"latitude",
+                  "color":"#03a9f4",
+                  "settings":{
+
+                  },
+                  "_hash":0.07403140698322042
+                },
+                {
+                  "name":"longitude",
+                  "type":"attribute",
+                  "label":"longitude",
+                  "color":"#ff9800",
+                  "settings":{
+
+                  },
+                  "_hash":0.7622496431426202
+                }
+              ],
+              "deviceAliasId":"3",
+              "name":"Building C Server Room"
+            }
+          ],
+          "timewindow":{
+            "realtime":{
+              "timewindowMs":60000
+            }
+          },
+          "showTitle":true,
+          "backgroundColor":"#fff",
+          "color":"rgba(0, 0, 0, 0.87)",
+          "padding":"8px",
+          "settings":{
+            "gmApiKey": "AIzaSyDoEx2kaGz3PxwbI9T7ccTSg5xjdw8Nw8Q",
+            "markersSettings":[
+              {
+                "label":"Building A",
+                "color":"#1e88e5",
+                "latKeyName":"latitude",
+                "lngKeyName":"longitude",
+                "showLabel":true,
+                "tooltipPattern":"<div style=\"margin: 5px;\">Server room:<br/><b>Temperature:</b> ${temperature:1}°C<br/><b>Humidity:</b> ${humidity:1}%<br/><a href=\"http://demo.thingsboard.io/dashboards/$BUILDING_A_FLOOR_PLAN_LINK\">Floor Plan</a><br/><a href=\"http://demo.thingsboard.io/dashboards/$BUILDING_A_HISTORICAL_DATA_LINK\">Historical Data</a></div>"
+              },
+              {
+                "label":"Building B",
+                "color":"#fdd835",
+                "latKeyName":"latitude",
+                "lngKeyName":"longitude",
+                "showLabel":true,
+                "tooltipPattern":"<div style=\"margin: 5px;\">Server room:<br/><b>Temperature:</b> ${temperature:1}°C<br/><b>Humidity:</b> ${humidity:1}%<br/><a href=\"http://demo.thingsboard.io/dashboards/$BUILDING_A_FLOOR_PLAN_LINK\">Floor Plan</a><br/><a href=\"http://demo.thingsboard.io/dashboards/$BUILDING_B_HISTORICAL_DATA_LINK\">Historical Data</a></div>"
+              },
+              {
+                "label":"Building C",
+                "latKeyName":"latitude",
+                "lngKeyName":"longitude",
+                "showLabel":true,
+                "tooltipPattern":"<div style=\"margin: 5px;\">Server room:<br/><b>Temperature:</b> ${temperature:1}°C<br/><b>Humidity:</b> ${humidity:1}%<br/><a href=\"http://demo.thingsboard.io/dashboards/$BUILDING_A_FLOOR_PLAN_LINK\">Floor Plan</a><br/><a href=\"http://demo.thingsboard.io/dashboards/$BUILDING_C_HISTORICAL_DATA_LINK\">Historical Data</a></div>"
+              }
+            ],
+            "fitMapBounds":true,
+            "defaultZoomLevel":17
+          },
+          "title":"Server Rooms"
+        },
+        "row":0,
+        "col":0
+      }
+    ],
+    "deviceAliases":{
+      "1":{
+        "alias":"Building A Server Room",
+        "deviceId":"{DEVICE_ID}"
+      },
+      "2":{
+        "alias":"Building B Server Room",
+        "deviceId":"{DEVICE_ID}"
+      },
+      "3":{
+        "alias":"Building C Server Room",
+        "deviceId":"{DEVICE_ID}"
+      }
+    }
+  }
+}
