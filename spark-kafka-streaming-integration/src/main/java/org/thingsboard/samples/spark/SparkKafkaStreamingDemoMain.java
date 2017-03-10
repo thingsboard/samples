@@ -19,23 +19,29 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.streaming.Duration;
 import org.apache.spark.streaming.api.java.JavaInputDStream;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
 import org.apache.spark.streaming.kafka010.ConsumerStrategies;
 import org.apache.spark.streaming.kafka010.KafkaUtils;
 import org.apache.spark.streaming.kafka010.LocationStrategies;
-import org.eclipse.paho.client.mqttv3.*;
+import org.eclipse.paho.client.mqttv3.IMqttActionListener;
+import org.eclipse.paho.client.mqttv3.IMqttToken;
+import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+import scala.Tuple2;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.OptionalDouble;
 
 
-public class KafkaStreamingDemoMain {
+public class SparkKafkaStreamingDemoMain {
 
     public static void main(String[] args) throws Exception {
         new StreamRunner().start();
@@ -71,12 +77,15 @@ public class KafkaStreamingDemoMain {
 
                 stream.foreachRDD(rdd ->
                 {
-                    OptionalDouble averageTemp = rdd.mapToDouble(r ->
-                            Double.valueOf(r.value())
-                    ).collect().stream().mapToDouble(a -> a).average();
+                    JavaRDD<Tuple2<Double, Integer>> doubleValues =
+                            rdd.map(n -> new Tuple2<>(Double.valueOf(n.value()), 1));
 
-                    if (averageTemp.isPresent()) {
-                        String mqttMsg = "{\"temperature\":" + averageTemp.getAsDouble() + "}";
+                    if (!doubleValues.isEmpty()) {
+                        Tuple2<Double, Integer> sumTuple = doubleValues
+                                .reduce((accum, n) -> new Tuple2<>(accum._1 + n._1, accum._2 + n._2));
+
+                        Double averageTemp = sumTuple._1 / sumTuple._2;
+                        String mqttMsg = "{\"temperature\":" + averageTemp + "}";
                         publishTelemetryToThingsboard(mqttMsg);
                     }
                 });
