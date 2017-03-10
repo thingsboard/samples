@@ -25,7 +25,7 @@
         </encoder>
     </appender>
 
-    <logger name="org.thingsboard.demo.loader" level="INFO" />
+    <logger name="org.thingsboard.samples.spark" level="INFO" />
 
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
