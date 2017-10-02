@@ -306,21 +306,23 @@ public class DemoData {
             );
 
             JsonNode deviceAttributesJson = devicesJson.get("deviceAttributes");
-            deviceAttributesJson.forEach(
-                    jsonNode -> {
-                        String deviceName = jsonNode.get("deviceName").asText();
-                        Map<String, JsonNode> attributesMap = new HashMap<>();
-                        if (jsonNode.has("server")) {
-                            JsonNode serverAttributes = jsonNode.get("server");
-                            attributesMap.put(DataConstants.SERVER_SCOPE, serverAttributes);
+            if (deviceAttributesJson != null) {
+                deviceAttributesJson.forEach(
+                        jsonNode -> {
+                            String deviceName = jsonNode.get("deviceName").asText();
+                            Map<String, JsonNode> attributesMap = new HashMap<>();
+                            if (jsonNode.has("server")) {
+                                JsonNode serverAttributes = jsonNode.get("server");
+                                attributesMap.put(DataConstants.SERVER_SCOPE, serverAttributes);
+                            }
+                            if (jsonNode.has("shared")) {
+                                JsonNode sharedAttributes = jsonNode.get("shared");
+                                attributesMap.put(DataConstants.SHARED_SCOPE, sharedAttributes);
+                            }
+                            devicesAttributes.put(deviceName, attributesMap);
                         }
-                        if (jsonNode.has("shared")) {
-                            JsonNode sharedAttributes = jsonNode.get("shared");
-                            attributesMap.put(DataConstants.SHARED_SCOPE, sharedAttributes);
-                        }
-                        devicesAttributes.put(deviceName, attributesMap);
-                    }
-            );
+                );
+            }
 
         }
         dashboardsContent.forEach(

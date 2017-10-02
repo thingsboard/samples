@@ -2,52 +2,52 @@
   "devices":[
     {
       "name":"DHT11 Demo Device",
-      "additionalInfo":{
-        "description":"Demo device that is used in sample applications that upload data from DHT11 temperature and humidity sensor"
-      }
+      "type":"HVAC",
+      "additionalInfo":"Demo device that is used in sample applications that upload data from DHT11 temperature and humidity sensor"
     },
     {
       "name":"Raspberry Pi Demo Device",
-      "additionalInfo":{
-        "description":"Demo device that is used in Raspberry Pi GPIO control sample application"
-      }
+      "type":"HVAC",
+      "additionalInfo":"Demo device that is used in Raspberry Pi GPIO control sample application"
     },
     {
       "name":"LinkIt One Demo Device",
-      "additionalInfo":{
-        "description":"Demo device that is used in sample applications for LinkIt One"
-      }
+      "type":"HVAC",
+      "additionalInfo":"Demo device that is used in sample applications for LinkIt One"
     },
     {
       "name":"Arduino UNO Demo Device",
-      "additionalInfo":{
-        "description":"Demo device that is used in sample applications for Arduino UNO"
-      }
+      "type":"HVAC",
+      "additionalInfo":"Demo device that is used in sample applications for Arduino UNO"
     },
     {
       "name":"ESP8266 Demo Device",
-      "additionalInfo":{
-        "description":"Demo device that is used in sample applications for ESP8266"
-      }
+      "type":"HVAC",
+      "additionalInfo":"Demo device that is used in sample applications for ESP8266"
     },
     {
       "name":"Test Device A1",
+      "type":"HVAC",
       "additionalInfo":null
     },
     {
       "name":"Test Device A2",
+      "type":"HVAC",
       "additionalInfo":null
     },
     {
       "name":"Test Device A3",
+      "type":"HVAC",
       "additionalInfo":null
     },
     {
       "name":"Test Device B1",
+      "type":"HVAC",
       "additionalInfo":null
     },
     {
       "name":"Test Device C1",
+      "type":"HVAC",
       "additionalInfo":null
     }
   ],
