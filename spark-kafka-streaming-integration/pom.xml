@@ -77,7 +77,13 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- MQTT client dependency to send messages to Thingsboard with average temperature -->
+        <!-- HTTP Client to to send messages to ThingsBoard through REST API-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <!-- MQTT client dependency to send messages to ThingsBoard with average values -->
         <dependency>
             <groupId>org.eclipse.paho</groupId>
             <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
