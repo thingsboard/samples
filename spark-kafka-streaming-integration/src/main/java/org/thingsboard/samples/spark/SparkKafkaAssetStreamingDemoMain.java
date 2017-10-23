@@ -16,8 +16,8 @@
 package org.thingsboard.samples.spark;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -32,32 +32,37 @@ import org.apache.spark.streaming.api.java.JavaStreamingContext;
 import org.apache.spark.streaming.kafka010.ConsumerStrategies;
 import org.apache.spark.streaming.kafka010.KafkaUtils;
 import org.apache.spark.streaming.kafka010.LocationStrategies;
-import org.eclipse.paho.client.mqttv3.IMqttActionListener;
-import org.eclipse.paho.client.mqttv3.IMqttToken;
-import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
-import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 import scala.Tuple2;
 
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 
-public class SparkKafkaStreamingDemoMain {
+public class SparkKafkaAssetStreamingDemoMain {
 
-    // Access token for 'Analytics Gateway' Device.
-    private static final String GATEWAY_ACCESS_TOKEN = "$GATEWAY_ACCESS_TOKEN";
     // Kafka brokers URL for Spark Streaming to connect and fetched messages from.
     private static final String KAFKA_BROKER_LIST = "localhost:9092";
-    // URL of Thingsboard MQTT endpoint
-    private static final String THINGSBOARD_MQTT_ENDPOINT = "tcp://localhost:1883";
+    // URL of ThingsBoard REST endpoint
+    private static final String THINGSBOARD_REST_ENDPOINT = "http://localhost:8080";
+    // ThingsBoard User login
+    private static final String USERNAME = "tenant@thingsboard.org";
+    // ThingsBoard User password
+    private static final String PASSWORD = "tenant";
+    // Asset ID to post the aggregated data inot
+    private static final String ASSET_ID = "ae19d9e0-b73c-11e7-96ba-31d2955bf1fb";
+    // Asset Publish Telemetry Endpoint
+    private static final String ASSET_PUBLISH_TELEMETRY_ENDPOINT = THINGSBOARD_REST_ENDPOINT + "/api/plugins/telemetry/ASSET/" + ASSET_ID + "/timeseries/values";
     // Time interval in milliseconds of Spark Streaming Job, 10 seconds by default.
     private static final int STREAM_WINDOW_MILLISECONDS = 10000; // 10 seconds
     // Kafka telemetry topic to subscribe to. This should match to the topic in the rule action.
     private static final Collection<String> TOPICS = Arrays.asList("weather-stations-data");
     // The application name
     public static final String APP_NAME = "Kafka Spark Streaming App";
+
 
     // Misc Kafka client properties
     private static Map<String, Object> getKafkaParams() {
@@ -78,10 +83,11 @@ public class SparkKafkaStreamingDemoMain {
     @Slf4j
     private static class StreamRunner {
 
-        private final MqttAsyncClient client;
+        private final RestTemplate restTemplate;
+        private String token;
 
         StreamRunner() throws MqttException {
-            client = new MqttAsyncClient(THINGSBOARD_MQTT_ENDPOINT, MqttAsyncClient.generateClientId());
+            restTemplate = new RestTemplate();
         }
 
         void start() throws Exception {
@@ -89,7 +95,7 @@ public class SparkKafkaStreamingDemoMain {
 
             try (JavaStreamingContext ssc = new JavaStreamingContext(conf, new Duration(STREAM_WINDOW_MILLISECONDS))) {
 
-                connectToThingsboard();
+                loginRestTemplate();
 
                 JavaInputDStream<ConsumerRecord<String, String>> stream =
                         KafkaUtils.createDirectStream(
@@ -101,6 +107,7 @@ public class SparkKafkaStreamingDemoMain {
                 stream.foreachRDD(rdd ->
                 {
                     // Map incoming JSON to WindSpeedData objects
+
                     JavaRDD<WindSpeedData> windRdd = rdd.map(new WeatherStationDataMapper());
                     // Map WindSpeedData objects by GeoZone
                     JavaPairRDD<String, AvgWindSpeedData> windByZoneRdd = windRdd.mapToPair(d -> new Tuple2<>(d.getGeoZone(), new AvgWindSpeedData(d.getWindSpeed())));
@@ -108,8 +115,8 @@ public class SparkKafkaStreamingDemoMain {
                     windByZoneRdd = windByZoneRdd.reduceByKey((a, b) -> AvgWindSpeedData.sum(a, b));
                     // Map <GeoZone, AvgWindSpeedData> back to WindSpeedData
                     List<WindSpeedData> aggData = windByZoneRdd.map(t -> new WindSpeedData(t._1, t._2.getAvgValue())).collect();
-                    // Push aggregated data to Thingsboard using Gateway MQTT API
-                    publishTelemetryToThingsboard(aggData);
+                    // Push aggregated data to ThingsBoard using Gateway MQTT API
+                    publishTelemetryToThingsBoardAsset(aggData);
                 });
 
                 ssc.start();
@@ -117,34 +124,25 @@ public class SparkKafkaStreamingDemoMain {
             }
         }
 
-        private void connectToThingsboard() throws Exception {
-            MqttConnectOptions options = new MqttConnectOptions();
-            options.setUserName(GATEWAY_ACCESS_TOKEN);
-            try {
-                client.connect(options, null, new IMqttActionListener() {
-                    @Override
-                    public void onSuccess(IMqttToken iMqttToken) {
-                        log.info("Connected to Thingsboard!");
-                    }
-
-                    @Override
-                    public void onFailure(IMqttToken iMqttToken, Throwable e) {
-                        log.error("Failed to connect to Thingsboard!", e);
-                    }
-                }).waitForCompletion();
-            } catch (MqttException e) {
-                log.error("Failed to connect to the server", e);
-            }
+        private void loginRestTemplate() {
+            Map<String, String> loginRequest = new HashMap<>();
+            loginRequest.put("username", USERNAME);
+            loginRequest.put("password", PASSWORD);
+            ResponseEntity<JsonNode> tokenInfo = restTemplate.postForEntity(THINGSBOARD_REST_ENDPOINT + "/api/auth/login", loginRequest, JsonNode.class);
+            this.token = tokenInfo.getBody().get("token").asText();
         }
 
-        private void publishTelemetryToThingsboard(List<WindSpeedData> aggData) throws Exception {
+
+        private void publishTelemetryToThingsBoardAsset(List<WindSpeedData> aggData) throws Exception {
+            HttpHeaders requestHeaders = new HttpHeaders();
+            requestHeaders.add("X-Authorization", "Bearer " + token);
+
             if (!aggData.isEmpty()) {
                 for (WindSpeedData d : aggData) {
-                    MqttMessage connectMsg = new MqttMessage(toConnectJson(d.getGeoZone()).getBytes(StandardCharsets.UTF_8));
-                    client.publish("v1/gateway/connect", connectMsg, null, getCallback());
+                    HttpEntity<?> httpEntity = new HttpEntity<Object>(d, requestHeaders);
+                    ResponseEntity<Void> result = restTemplate.postForEntity(ASSET_PUBLISH_TELEMETRY_ENDPOINT,
+                            httpEntity, Void.class);
                 }
-                MqttMessage dataMsg = new MqttMessage(toDataJson(aggData).getBytes(StandardCharsets.UTF_8));
-                client.publish("v1/gateway/telemetry", dataMsg, null, getCallback());
             }
         }
 
