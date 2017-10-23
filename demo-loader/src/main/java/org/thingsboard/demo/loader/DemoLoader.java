@@ -92,6 +92,7 @@ public class DemoLoader {
             } catch (Exception e) {
                 System.err.println(String.format("Invalid demo archive: %s", demoDataArchive));
                 System.err.println(e.getMessage());
+                e.printStackTrace();
                 System.exit(-1);
             }
             demoData.uploadData(restTemplate, baseUrl);
