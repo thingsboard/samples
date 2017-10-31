@@ -36,6 +36,7 @@
         <spring.version>4.3.4.RELEASE</spring.version>
         <commons-compress.version>1.12</commons-compress.version>
         <paho.client.version>1.1.0</paho.client.version>
+        <jackson.version>2.6.5</jackson.version>
     </properties>
 
     <modules>
@@ -147,6 +148,11 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
                 <version>${slf4j.version}</version>
@@ -176,6 +182,11 @@
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
                 <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-core</artifactId>
+                <version>${spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
